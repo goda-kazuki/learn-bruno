@@ -1,5 +1,5 @@
 meta {
-  name: アイテム作成
+  name: 3_作成
   type: http
   seq: 3
 }
@@ -22,4 +22,9 @@ assert {
   res.body.name: eq New Item
   res.body.description: eq A new item
   res.body.id: isNumber
+}
+
+script:post-response {
+  const body = res.getBody();
+  bru.setVar("createdId", body.id);
 }

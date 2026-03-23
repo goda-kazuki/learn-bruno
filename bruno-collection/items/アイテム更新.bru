@@ -16,3 +16,9 @@ body:json {
     "description": "Updated description"
   }
 }
+
+assert {
+  res.status: eq 200
+  res.body.name: eq Updated Item
+  res.body.description: eq Updated description
+}

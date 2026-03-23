@@ -9,3 +9,8 @@ delete {
   body: none
   auth: none
 }
+
+assert {
+  res.status: eq 200
+  res.body.message: eq Deleted
+}

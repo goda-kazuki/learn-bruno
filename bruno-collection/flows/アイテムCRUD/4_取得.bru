@@ -1,0 +1,27 @@
+meta {
+  name: 4_取得
+  type: http
+  seq: 4
+}
+
+get {
+  url: {{baseUrl}}/items/{{createdId}}
+  body: none
+  auth: none
+}
+
+script:pre-request {
+  const id = bru.getVar("createdId");
+  if (!id) {
+    throw new Error("createdId is not set. Run 3_作成 first.");
+  }
+}
+
+assert {
+  res.status: eq 200
+  res.body.name: eq New Item
+}
+
+vars:post-response {
+  itemName: res.body.name
+}

@@ -1,0 +1,24 @@
+meta {
+  name: 6_削除
+  type: http
+  seq: 6
+}
+
+delete {
+  url: {{baseUrl}}/items/{{createdId}}
+  body: none
+  auth: none
+}
+
+assert {
+  res.status: eq 200
+  res.body.message: eq Deleted
+}
+
+tests {
+  test("削除完了メッセージを確認", function() {
+    const body = res.getBody();
+    expect(body).to.have.property('message');
+    expect(body.message).to.equal("Deleted");
+  });
+}

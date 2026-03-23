@@ -1,0 +1,33 @@
+meta {
+  name: 5_更新
+  type: http
+  seq: 5
+}
+
+put {
+  url: {{baseUrl}}/items/{{createdId}}
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "name": "Updated Item",
+    "description": "Updated description"
+  }
+}
+
+assert {
+  res.status: eq 200
+  res.body.name: eq Updated Item
+  res.body.description: eq Updated description
+}
+
+tests {
+  test("名前が変更されている", function() {
+    const oldName = bru.getVar("itemName");
+    const body = res.getBody();
+    expect(body.name).to.not.equal(oldName);
+    expect(body.name).to.equal("Updated Item");
+  });
+}
