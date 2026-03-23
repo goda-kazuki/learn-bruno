@@ -1,0 +1,18 @@
+meta {
+  name: Create Item
+  type: http
+  seq: 3
+}
+
+post {
+  url: {{baseUrl}}/items
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "name": "New Item",
+    "description": "A new item"
+  }
+}
