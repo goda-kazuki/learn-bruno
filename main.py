@@ -24,11 +24,13 @@ class Message(BaseModel):
     message: str
 
 
-ITEMS: dict[int, Item] = {
+_INITIAL_ITEMS: dict[int, Item] = {
     1: Item(id=1, name="Item 1", description="First item"),
     2: Item(id=2, name="Item 2", description="Second item"),
     3: Item(id=3, name="Item 3", description=None),
 }
+
+ITEMS: dict[int, Item] = dict(_INITIAL_ITEMS)
 
 _next_id = 4
 
@@ -67,3 +69,12 @@ def update_item(item_id: int, body: ItemUpdate) -> Item:
 def delete_item(item_id: int) -> Message:
     del ITEMS[item_id]
     return Message(message="Deleted")
+
+
+@app.post("/items/reset")
+def reset_items() -> Message:
+    global _next_id
+    ITEMS.clear()
+    ITEMS.update(_INITIAL_ITEMS)
+    _next_id = 4
+    return Message(message="Reset to initial state")

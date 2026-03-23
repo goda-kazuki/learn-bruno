@@ -185,6 +185,24 @@
           }
         }
       }
+    },
+    "/items/reset": {
+      "post": {
+        "summary": "Reset Items",
+        "operationId": "reset_items_items_reset_post",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Message"
+                }
+              }
+            }
+          }
+        }
+      }
     }
   },
   "components": {
