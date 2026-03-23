@@ -1,595 +1,653 @@
 {
-	"info": {
-		"_postman_id": "learn-bruno-collection",
-		"name": "learn-bruno",
-		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
-	},
-	"variable": [
-		{
-			"key": "baseUrl",
-			"value": "http://localhost:8000"
-		}
-	],
-	"item": [
-		{
-			"name": "items",
-			"item": [
-				{
-					"name": "アイテム一覧取得",
-					"request": {
-						"method": "GET",
-						"header": [
-							{
-								"key": "Content-Type",
-								"value": "application/json"
-							}
-						],
-						"url": {
-							"raw": "{{baseUrl}}/items",
-							"host": ["{{baseUrl}}"],
-							"path": ["items"]
-						}
-					},
-					"response": [],
-					"event": [
-						{
-							"listen": "test",
-							"script": {
-								"type": "text/javascript",
-								"exec": [
-									"pm.test('ステータスコードが200', function() {",
-									"    pm.response.to.have.status(200);",
-									"});",
-									"",
-									"pm.test('Content-Typeがapplication/json', function() {",
-									"    pm.expect(pm.response.headers.get('Content-Type')).to.include('application/json');",
-									"});",
-									"",
-									"pm.test('レスポンスが配列', function() {",
-									"    const body = pm.response.json();",
-									"    pm.expect(body).to.be.an('array');",
-									"});",
-									"",
-									"pm.test('各アイテムにid,nameプロパティがある', function() {",
-									"    const body = pm.response.json();",
-									"    body.forEach(item => {",
-									"        pm.expect(item).to.have.property('id');",
-									"        pm.expect(item).to.have.property('name');",
-									"    });",
-									"});"
-								]
-							}
-						}
-					]
-				},
-				{
-					"name": "アイテム取得",
-					"request": {
-						"method": "GET",
-						"header": [
-							{
-								"key": "Content-Type",
-								"value": "application/json"
-							}
-						],
-						"url": {
-							"raw": "{{baseUrl}}/items/1",
-							"host": ["{{baseUrl}}"],
-							"path": ["items", "1"]
-						}
-					},
-					"response": [],
-					"event": [
-						{
-							"listen": "test",
-							"script": {
-								"type": "text/javascript",
-								"exec": [
-									"pm.test('ステータスコードが200', function() {",
-									"    pm.response.to.have.status(200);",
-									"});",
-									"",
-									"pm.test('idが1', function() {",
-									"    const body = pm.response.json();",
-									"    pm.expect(body.id).to.eql(1);",
-									"});",
-									"",
-									"pm.test('nameが文字列', function() {",
-									"    const body = pm.response.json();",
-									"    pm.expect(body.name).to.be.a('string');",
-									"});"
-								]
-							}
-						}
-					]
-				},
-				{
-					"name": "アイテム作成",
-					"request": {
-						"method": "POST",
-						"header": [
-							{
-								"key": "Content-Type",
-								"value": "application/json"
-							}
-						],
-						"url": {
-							"raw": "{{baseUrl}}/items",
-							"host": ["{{baseUrl}}"],
-							"path": ["items"]
-						},
-						"body": {
-							"mode": "raw",
-							"raw": "{\n    \"name\": \"New Item\",\n    \"description\": \"A new item\"\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						}
-					},
-					"response": [],
-					"event": [
-						{
-							"listen": "test",
-							"script": {
-								"type": "text/javascript",
-								"exec": [
-									"pm.test('ステータスコードが201', function() {",
-									"    pm.response.to.have.status(201);",
-									"});",
-									"",
-									"pm.test('nameがNew Item', function() {",
-									"    const body = pm.response.json();",
-									"    pm.expect(body.name).to.eql('New Item');",
-									"});",
-									"",
-									"pm.test('descriptionがA new item', function() {",
-									"    const body = pm.response.json();",
-									"    pm.expect(body.description).to.eql('A new item');",
-									"});",
-									"",
-									"pm.test('idが数値', function() {",
-									"    const body = pm.response.json();",
-									"    pm.expect(body.id).to.be.a('number');",
-									"});"
-								]
-							}
-						}
-					]
-				},
-				{
-					"name": "アイテム更新",
-					"request": {
-						"method": "PUT",
-						"header": [
-							{
-								"key": "Content-Type",
-								"value": "application/json"
-							}
-						],
-						"url": {
-							"raw": "{{baseUrl}}/items/1",
-							"host": ["{{baseUrl}}"],
-							"path": ["items", "1"]
-						},
-						"body": {
-							"mode": "raw",
-							"raw": "{\n    \"name\": \"Updated Item\",\n    \"description\": \"Updated description\"\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						}
-					},
-					"response": [],
-					"event": [
-						{
-							"listen": "test",
-							"script": {
-								"type": "text/javascript",
-								"exec": [
-									"pm.test('ステータスコードが200', function() {",
-									"    pm.response.to.have.status(200);",
-									"});",
-									"",
-									"pm.test('nameがUpdated Item', function() {",
-									"    const body = pm.response.json();",
-									"    pm.expect(body.name).to.eql('Updated Item');",
-									"});",
-									"",
-									"pm.test('descriptionがUpdated description', function() {",
-									"    const body = pm.response.json();",
-									"    pm.expect(body.description).to.eql('Updated description');",
-									"});"
-								]
-							}
-						}
-					]
-				},
-				{
-					"name": "アイテム削除",
-					"request": {
-						"method": "DELETE",
-						"header": [
-							{
-								"key": "Content-Type",
-								"value": "application/json"
-							}
-						],
-						"url": {
-							"raw": "{{baseUrl}}/items/1",
-							"host": ["{{baseUrl}}"],
-							"path": ["items", "1"]
-						}
-					},
-					"response": [],
-					"event": [
-						{
-							"listen": "test",
-							"script": {
-								"type": "text/javascript",
-								"exec": [
-									"pm.test('ステータスコードが200', function() {",
-									"    pm.response.to.have.status(200);",
-									"});",
-									"",
-									"pm.test('メッセージがDeleted', function() {",
-									"    const body = pm.response.json();",
-									"    pm.expect(body.message).to.eql('Deleted');",
-									"});"
-								]
-							}
-						}
-					]
-				},
-				{
-					"name": "アイテムリセット",
-					"request": {
-						"method": "POST",
-						"header": [
-							{
-								"key": "Content-Type",
-								"value": "application/json"
-							}
-						],
-						"url": {
-							"raw": "{{baseUrl}}/items/reset",
-							"host": ["{{baseUrl}}"],
-							"path": ["items", "reset"]
-						}
-					},
-					"response": [],
-					"event": [
-						{
-							"listen": "test",
-							"script": {
-								"type": "text/javascript",
-								"exec": [
-									"pm.test('ステータスコードが200', function() {",
-									"    pm.response.to.have.status(200);",
-									"});",
-									"",
-									"pm.test('メッセージがReset to initial state', function() {",
-									"    const body = pm.response.json();",
-									"    pm.expect(body.message).to.eql('Reset to initial state');",
-									"});"
-								]
-							}
-						}
-					]
-				}
-			]
-		},
-		{
-			"name": "flows",
-			"item": [
-				{
-					"name": "アイテムCRUD",
-					"item": [
-						{
-							"name": "1_リセット",
-							"request": {
-								"method": "POST",
-								"header": [
-									{
-										"key": "Content-Type",
-										"value": "application/json"
-									}
-								],
-								"url": {
-									"raw": "{{baseUrl}}/items/reset",
-									"host": ["{{baseUrl}}"],
-									"path": ["items", "reset"]
-								}
-							},
-							"response": [],
-							"event": [
-								{
-									"listen": "test",
-									"script": {
-										"type": "text/javascript",
-										"exec": [
-											"pm.test('ステータスコードが200', function() {",
-											"    pm.response.to.have.status(200);",
-											"});",
-											"",
-											"pm.test('メッセージがReset to initial state', function() {",
-											"    const body = pm.response.json();",
-											"    pm.expect(body.message).to.eql('Reset to initial state');",
-											"});"
-										]
-									}
-								}
-							]
-						},
-						{
-							"name": "2_一覧取得",
-							"request": {
-								"method": "GET",
-								"header": [
-									{
-										"key": "Content-Type",
-										"value": "application/json"
-									}
-								],
-								"url": {
-									"raw": "{{baseUrl}}/items",
-									"host": ["{{baseUrl}}"],
-									"path": ["items"]
-								}
-							},
-							"response": [],
-							"event": [
-								{
-									"listen": "test",
-									"script": {
-										"type": "text/javascript",
-										"exec": [
-											"pm.test('ステータスコードが200', function() {",
-											"    pm.response.to.have.status(200);",
-											"});",
-											"",
-											"pm.test('Content-Typeがapplication/json', function() {",
-											"    pm.expect(pm.response.headers.get('Content-Type')).to.include('application/json');",
-											"});",
-											"",
-											"pm.test('レスポンスが配列', function() {",
-											"    const body = pm.response.json();",
-											"    pm.expect(body).to.be.an('array');",
-											"});",
-											"",
-											"pm.test('初期データは3件', function() {",
-											"    const body = pm.response.json();",
-											"    pm.expect(body).to.have.lengthOf(3);",
-											"});",
-											"",
-											"pm.test('各アイテムにid,nameプロパティがある', function() {",
-											"    const body = pm.response.json();",
-											"    body.forEach(item => {",
-											"        pm.expect(item).to.have.property('id');",
-											"        pm.expect(item).to.have.property('name');",
-											"    });",
-											"});"
-										]
-									}
-								}
-							]
-						},
-						{
-							"name": "3_作成",
-							"request": {
-								"method": "POST",
-								"header": [
-									{
-										"key": "Content-Type",
-										"value": "application/json"
-									}
-								],
-								"url": {
-									"raw": "{{baseUrl}}/items",
-									"host": ["{{baseUrl}}"],
-									"path": ["items"]
-								},
-								"body": {
-									"mode": "raw",
-									"raw": "{\n    \"name\": \"New Item\",\n    \"description\": \"A new item\"\n}",
-									"options": {
-										"raw": {
-											"language": "json"
-										}
-									}
-								}
-							},
-							"response": [],
-							"event": [
-								{
-									"listen": "test",
-									"script": {
-										"type": "text/javascript",
-										"exec": [
-											"pm.test('ステータスコードが201', function() {",
-											"    pm.response.to.have.status(201);",
-											"});",
-											"",
-											"pm.test('nameがNew Item', function() {",
-											"    const body = pm.response.json();",
-											"    pm.expect(body.name).to.eql('New Item');",
-											"});",
-											"",
-											"pm.test('descriptionがA new item', function() {",
-											"    const body = pm.response.json();",
-											"    pm.expect(body.description).to.eql('A new item');",
-											"});",
-											"",
-											"pm.test('idが数値', function() {",
-											"    const body = pm.response.json();",
-											"    pm.expect(body.id).to.be.a('number');",
-											"});",
-											"",
-											"// post-response: createdId をコレクション変数に保存",
-											"const body = pm.response.json();",
-											"pm.collectionVariables.set('createdId', body.id);"
-										]
-									}
-								}
-							]
-						},
-						{
-							"name": "4_取得",
-							"request": {
-								"method": "GET",
-								"header": [
-									{
-										"key": "Content-Type",
-										"value": "application/json"
-									}
-								],
-								"url": {
-									"raw": "{{baseUrl}}/items/{{createdId}}",
-									"host": ["{{baseUrl}}"],
-									"path": ["items", "{{createdId}}"]
-								}
-							},
-							"response": [],
-							"event": [
-								{
-									"listen": "prerequest",
-									"script": {
-										"type": "text/javascript",
-										"exec": [
-											"const id = pm.collectionVariables.get('createdId');",
-											"if (!id) {",
-											"    throw new Error('createdId is not set. Run 3_作成 first.');",
-											"}"
-										]
-									}
-								},
-								{
-									"listen": "test",
-									"script": {
-										"type": "text/javascript",
-										"exec": [
-											"pm.test('ステータスコードが200', function() {",
-											"    pm.response.to.have.status(200);",
-											"});",
-											"",
-											"pm.test('nameがNew Item', function() {",
-											"    const body = pm.response.json();",
-											"    pm.expect(body.name).to.eql('New Item');",
-											"});",
-											"",
-											"// post-response: itemName をコレクション変数に保存",
-											"const body = pm.response.json();",
-											"pm.collectionVariables.set('itemName', body.name);"
-										]
-									}
-								}
-							]
-						},
-						{
-							"name": "5_更新",
-							"request": {
-								"method": "PUT",
-								"header": [
-									{
-										"key": "Content-Type",
-										"value": "application/json"
-									}
-								],
-								"url": {
-									"raw": "{{baseUrl}}/items/{{createdId}}",
-									"host": ["{{baseUrl}}"],
-									"path": ["items", "{{createdId}}"]
-								},
-								"body": {
-									"mode": "raw",
-									"raw": "{\n    \"name\": \"Updated Item\",\n    \"description\": \"Updated description\"\n}",
-									"options": {
-										"raw": {
-											"language": "json"
-										}
-									}
-								}
-							},
-							"response": [],
-							"event": [
-								{
-									"listen": "test",
-									"script": {
-										"type": "text/javascript",
-										"exec": [
-											"pm.test('ステータスコードが200', function() {",
-											"    pm.response.to.have.status(200);",
-											"});",
-											"",
-											"pm.test('nameがUpdated Item', function() {",
-											"    const body = pm.response.json();",
-											"    pm.expect(body.name).to.eql('Updated Item');",
-											"});",
-											"",
-											"pm.test('descriptionがUpdated description', function() {",
-											"    const body = pm.response.json();",
-											"    pm.expect(body.description).to.eql('Updated description');",
-											"});",
-											"",
-											"pm.test('名前が変更されている', function() {",
-											"    const oldName = pm.collectionVariables.get('itemName');",
-											"    const body = pm.response.json();",
-											"    pm.expect(body.name).to.not.eql(oldName);",
-											"    pm.expect(body.name).to.eql('Updated Item');",
-											"});"
-										]
-									}
-								}
-							]
-						},
-						{
-							"name": "6_削除",
-							"request": {
-								"method": "DELETE",
-								"header": [
-									{
-										"key": "Content-Type",
-										"value": "application/json"
-									}
-								],
-								"url": {
-									"raw": "{{baseUrl}}/items/{{createdId}}",
-									"host": ["{{baseUrl}}"],
-									"path": ["items", "{{createdId}}"]
-								}
-							},
-							"response": [],
-							"event": [
-								{
-									"listen": "test",
-									"script": {
-										"type": "text/javascript",
-										"exec": [
-											"pm.test('ステータスコードが200', function() {",
-											"    pm.response.to.have.status(200);",
-											"});",
-											"",
-											"pm.test('メッセージがDeleted', function() {",
-											"    const body = pm.response.json();",
-											"    pm.expect(body.message).to.eql('Deleted');",
-											"});",
-											"",
-											"pm.test('削除完了メッセージを確認', function() {",
-											"    const body = pm.response.json();",
-											"    pm.expect(body).to.have.property('message');",
-											"    pm.expect(body.message).to.eql('Deleted');",
-											"});"
-										]
-									}
-								}
-							]
-						}
-					]
-				}
-			]
-		}
-	]
+  "info": {
+    "_postman_id": "7c0d8fd7-b837-4506-823f-e81c12b9c9d5",
+    "name": "learn-bruno",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "25097596",
+    "_collection_link": "https://go.postman.co/collection/25097596-7c0d8fd7-b837-4506-823f-e81c12b9c9d5?source=collection_link"
+  },
+  "item": [
+    {
+      "name": "items",
+      "item": [
+        {
+          "name": "アイテム一覧取得",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('ステータスコードが200', function() {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "",
+                  "pm.test('Content-Typeがapplication/json', function() {",
+                  "    pm.expect(pm.response.headers.get('Content-Type')).to.include('application/json');",
+                  "});",
+                  "",
+                  "pm.test('レスポンスが配列', function() {",
+                  "    const body = pm.response.json();",
+                  "    pm.expect(body).to.be.an('array');",
+                  "});",
+                  "",
+                  "pm.test('各アイテムにid,nameプロパティがある', function() {",
+                  "    const body = pm.response.json();",
+                  "    body.forEach(item => {",
+                  "        pm.expect(item).to.have.property('id');",
+                  "        pm.expect(item).to.have.property('name');",
+                  "    });",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/items",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "items"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "アイテム取得",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('ステータスコードが200', function() {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "",
+                  "pm.test('idが1', function() {",
+                  "    const body = pm.response.json();",
+                  "    pm.expect(body.id).to.eql(1);",
+                  "});",
+                  "",
+                  "pm.test('nameが文字列', function() {",
+                  "    const body = pm.response.json();",
+                  "    pm.expect(body.name).to.be.a('string');",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/items/1",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "items",
+                "1"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "アイテム作成",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('ステータスコードが201', function() {",
+                  "    pm.response.to.have.status(201);",
+                  "});",
+                  "",
+                  "pm.test('nameがNew Item', function() {",
+                  "    const body = pm.response.json();",
+                  "    pm.expect(body.name).to.eql('New Item');",
+                  "});",
+                  "",
+                  "pm.test('descriptionがA new item', function() {",
+                  "    const body = pm.response.json();",
+                  "    pm.expect(body.description).to.eql('A new item');",
+                  "});",
+                  "",
+                  "pm.test('idが数値', function() {",
+                  "    const body = pm.response.json();",
+                  "    pm.expect(body.id).to.be.a('number');",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"name\": \"New Item\",\n    \"description\": \"A new item\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/items",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "items"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "アイテム更新",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('ステータスコードが200', function() {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "",
+                  "pm.test('nameがUpdated Item', function() {",
+                  "    const body = pm.response.json();",
+                  "    pm.expect(body.name).to.eql('Updated Item');",
+                  "});",
+                  "",
+                  "pm.test('descriptionがUpdated description', function() {",
+                  "    const body = pm.response.json();",
+                  "    pm.expect(body.description).to.eql('Updated description');",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"name\": \"Updated Item\",\n    \"description\": \"Updated description\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/items/1",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "items",
+                "1"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "アイテム削除",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('ステータスコードが200', function() {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "",
+                  "pm.test('メッセージがDeleted', function() {",
+                  "    const body = pm.response.json();",
+                  "    pm.expect(body.message).to.eql('Deleted');",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/items/1",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "items",
+                "1"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "アイテムリセット",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('ステータスコードが200', function() {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "",
+                  "pm.test('メッセージがReset to initial state', function() {",
+                  "    const body = pm.response.json();",
+                  "    pm.expect(body.message).to.eql('Reset to initial state');",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/items/reset",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "items",
+                "reset"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "flows",
+      "item": [
+        {
+          "name": "アイテムCRUD",
+          "item": [
+            {
+              "name": "1_リセット",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "pm.test('ステータスコードが200', function() {",
+                      "    pm.response.to.have.status(200);",
+                      "});",
+                      "",
+                      "pm.test('メッセージがReset to initial state', function() {",
+                      "    const body = pm.response.json();",
+                      "    pm.expect(body.message).to.eql('Reset to initial state');",
+                      "});"
+                    ]
+                  }
+                }
+              ],
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/items/reset",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "items",
+                    "reset"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "2_一覧取得",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "pm.test('ステータスコードが200', function() {",
+                      "    pm.response.to.have.status(200);",
+                      "});",
+                      "",
+                      "pm.test('Content-Typeがapplication/json', function() {",
+                      "    pm.expect(pm.response.headers.get('Content-Type')).to.include('application/json');",
+                      "});",
+                      "",
+                      "pm.test('レスポンスが配列', function() {",
+                      "    const body = pm.response.json();",
+                      "    pm.expect(body).to.be.an('array');",
+                      "});",
+                      "",
+                      "pm.test('初期データは3件', function() {",
+                      "    const body = pm.response.json();",
+                      "    pm.expect(body).to.have.lengthOf(3);",
+                      "});",
+                      "",
+                      "pm.test('各アイテムにid,nameプロパティがある', function() {",
+                      "    const body = pm.response.json();",
+                      "    body.forEach(item => {",
+                      "        pm.expect(item).to.have.property('id');",
+                      "        pm.expect(item).to.have.property('name');",
+                      "    });",
+                      "});"
+                    ]
+                  }
+                }
+              ],
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/items",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "items"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "3_作成",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "pm.test('ステータスコードが201', function() {",
+                      "    pm.response.to.have.status(201);",
+                      "});",
+                      "",
+                      "pm.test('nameがNew Item', function() {",
+                      "    const body = pm.response.json();",
+                      "    pm.expect(body.name).to.eql('New Item');",
+                      "});",
+                      "",
+                      "pm.test('descriptionがA new item', function() {",
+                      "    const body = pm.response.json();",
+                      "    pm.expect(body.description).to.eql('A new item');",
+                      "});",
+                      "",
+                      "pm.test('idが数値', function() {",
+                      "    const body = pm.response.json();",
+                      "    pm.expect(body.id).to.be.a('number');",
+                      "});",
+                      "",
+                      "// post-response: createdId をコレクション変数に保存",
+                      "const body = pm.response.json();",
+                      "pm.collectionVariables.set('createdId', body.id);"
+                    ]
+                  }
+                }
+              ],
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n    \"name\": \"New Item\",\n    \"description\": \"A new item\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{baseUrl}}/items",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "items"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "4_取得",
+              "event": [
+                {
+                  "listen": "prerequest",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "const id = pm.collectionVariables.get('createdId');",
+                      "if (!id) {",
+                      "    throw new Error('createdId is not set. Run 3_作成 first.');",
+                      "}"
+                    ]
+                  }
+                },
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "pm.test('ステータスコードが200', function() {",
+                      "    pm.response.to.have.status(200);",
+                      "});",
+                      "",
+                      "pm.test('nameがNew Item', function() {",
+                      "    const body = pm.response.json();",
+                      "    pm.expect(body.name).to.eql('New Item');",
+                      "});",
+                      "",
+                      "// post-response: itemName をコレクション変数に保存",
+                      "const body = pm.response.json();",
+                      "pm.collectionVariables.set('itemName', body.name);"
+                    ]
+                  }
+                }
+              ],
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/items/{{createdId}}",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "items",
+                    "{{createdId}}"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "5_更新",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "pm.test('ステータスコードが200', function() {",
+                      "    pm.response.to.have.status(200);",
+                      "});",
+                      "",
+                      "pm.test('nameがUpdated Item', function() {",
+                      "    const body = pm.response.json();",
+                      "    pm.expect(body.name).to.eql('Updated Item');",
+                      "});",
+                      "",
+                      "pm.test('descriptionがUpdated description', function() {",
+                      "    const body = pm.response.json();",
+                      "    pm.expect(body.description).to.eql('Updated description');",
+                      "});",
+                      "",
+                      "pm.test('名前が変更されている', function() {",
+                      "    const oldName = pm.collectionVariables.get('itemName');",
+                      "    const body = pm.response.json();",
+                      "    pm.expect(body.name).to.not.eql(oldName);",
+                      "    pm.expect(body.name).to.eql('Updated Item');",
+                      "});"
+                    ]
+                  }
+                }
+              ],
+              "request": {
+                "method": "PUT",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n    \"name\": \"Updated Item\",\n    \"description\": \"Updated description\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{baseUrl}}/items/{{createdId}}",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "items",
+                    "{{createdId}}"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "6_削除",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "pm.test('ステータスコードが200', function() {",
+                      "    pm.response.to.have.status(200);",
+                      "});",
+                      "",
+                      "pm.test('メッセージがDeleted', function() {",
+                      "    const body = pm.response.json();",
+                      "    pm.expect(body.message).to.eql('Deleted');",
+                      "});",
+                      "",
+                      "pm.test('削除完了メッセージを確認', function() {",
+                      "    const body = pm.response.json();",
+                      "    pm.expect(body).to.have.property('message');",
+                      "    pm.expect(body.message).to.eql('Deleted');",
+                      "});"
+                    ]
+                  }
+                }
+              ],
+              "request": {
+                "method": "DELETE",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/items/{{createdId}}",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "items",
+                    "{{createdId}}"
+                  ]
+                }
+              },
+              "response": []
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:8000"
+    }
+  ]
 }
